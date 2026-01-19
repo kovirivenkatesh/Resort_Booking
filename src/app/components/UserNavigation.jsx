@@ -13,7 +13,7 @@ const UserNavigation = ({userName}) => {
     </div>
    
     <div className="contact">
-        Call now : 123 456 789
+        Call now : 1800-889-5522
     </div>
     <Link href="/invoice" className='link'>
     <div className="bookings">

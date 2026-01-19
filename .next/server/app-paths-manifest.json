@@ -1,5 +1,10 @@
 {
   "/page": "app/page.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/(user)/detail/[id]/page": "app/(user)/detail/[id]/page.js",
+  "/(user)/invoice/page": "app/(user)/invoice/page.js",
+  "/(user)/login/page": "app/(user)/login/page.js",
+  "/(user)/register/page": "app/(user)/register/page.js",
+  "/api/users/[id]/route": "app/api/users/[id]/route.js",
+  "/api/admin/add-product/route": "app/api/admin/add-product/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js"
 }
