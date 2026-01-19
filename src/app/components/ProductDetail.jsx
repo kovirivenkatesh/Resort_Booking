@@ -17,105 +17,144 @@ const DynamicProduct = () => {
 
   const router = useRouter();
 
-    const [record, setRecord] = useState("")
+  const [record, setRecord] = useState("")
 
-    const [selecetedDates, setSelectedDates] = useState(null)
+  const [selecetedDates, setSelectedDates] = useState(null)
 
-    const params = useParams();
+  const params = useParams();
 
-    const {id} = params
-    
-    console.log("dynamic ClientId:", id)
+  const { id } = params
 
-    const dynamicProductHandler = async()=>{
-        
-        const response = await fetch(`https://resort-booking-pied.vercel.app/api/admin/product/${id}`)
-        const newData = await response.json()
+  console.log("dynamic ClientId:", id)
 
-        console.log("dynaic data:", newData)
-        setRecord(newData.data)
+  const dynamicProductHandler = async () => {
 
+    const response = await fetch(`http://localhost:3000/api/admin/product/${id}`)
+    const newData = await response.json()
+
+    console.log("dynaic data:", newData)
+    setRecord(newData.data)
+
+  }
+
+  useEffect(() => {
+    dynamicProductHandler()
+  }, [])
+
+  const bookingHandler = async () => {
+    if (!selecetedDates) {
+      alert("Please select booking dates")
+      return
     }
 
-    useEffect(()=>{
-        dynamicProductHandler()
-    }, [])
-
-    const bookingHandler = async()=>{
-        if(!selecetedDates){
-          alert("Please select booking dates")
-          return
-        }
-
-          const bookingDetails = {record, selecetedDates}
-      try {
-        const response = await bookingAction(bookingDetails)
-        if(response.success){
-          alert("Booking Successfull")
-           router.push('/invoice')
-        }
-      } catch (error) {
-        
+    const bookingDetails = { record, selecetedDates }
+    try {
+      const response = await bookingAction(bookingDetails)
+      if (response.success) {
+        alert("Booking Successfull")
+        router.push('/invoice')
       }
+    } catch (error) {
 
     }
 
-    const handleDateSelect = (dates)=>{
-        setSelectedDates(dates)
-        console.log("dates coming from calenderComp:", dates)
-    }
+  }
+
+  const handleDateSelect = (bookingDates) => {
+    setSelectedDates(bookingDates)
+    console.log("Selected Dates:", bookingDates)
+  }
+
+
+
+  const getTotalDays = () => {
+    if (!selecetedDates?.startDate || !selecetedDates?.endDate) return 0
+
+    const start = new Date(selecetedDates.startDate)
+    const end = new Date(selecetedDates.endDate)
+
+    const diffTime = end - start
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    return diffDays
+  }
+
+  const totalDays = getTotalDays();
+
+  const totalPrice =
+    totalDays > 0
+      ? record.price * totalDays * (1 - record.offer / 100)
+      : 0;
 
   return (
     <div>
-        <CalenderComponent onDatesSelect={handleDateSelect}/>
-        <Link href="/">
-        <p align="center">Go Back</p>
-        </Link>
-      {record? 
-         (<div className="">
-            <div className="singleSection">
+      <CalenderComponent onDatesSelect={handleDateSelect} />
+      <Link href="/">
+        <button className='ml-20 border p-2 bg-green-500 rounded-md'>Go Back</button>
+      </Link>
+      {record ?
+        (<div className="">
+          <div className="singleSection">
             <div className="singleLeft">
-              <div className="">
-               <h2>{record.title}</h2>
+              <div className="font-bold text-xl">
+                <h2>{record.title}</h2>
               </div>
-              <img src={record.image} alt={record.title} className="singleImage"/>
-              </div>
-              <div className="singleCenter">
-               <div className="singlePrice">Rs.{record.price}</div>
-               <p className="singleDesc">{record.desc}</p>
-               <div className="">
-                   {record.amen.map((item, i)=>{
-                       return(
-                           <div className="singleAmen"  key={i}>
-                              <span>*</span> {item}
-                           </div>
-                       )
-                   })}
-               </div>
-               <div className="offer">
-               <span>*</span>
-                  <button>  Discount {record.offer}</button>
-               </div>
-               <div className="singleBtn">
-                   <button className="" onClick={bookingHandler}  >Book Now</button>
-               </div>
-              </div>
+              <img src={record.image} alt={record.title} className="singleImage" />
             </div>
+            <div className="singleCenter">
+              <div className="singlePrice"> Rs.{record.price}</div><br />
+              <p className="singleDesc"><span className='font-bold  text-lg'>Description:</span><br />{record.desc}</p>
+              <br />
+              <div className="">
+                <span className='font-bold text-lg'>Amenities</span><br />
+                {record.amen.map((item, i) => {
+                  return (
+                    <div className="singleAmen" key={i}>
+                      <span>*</span> {item}
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="offer">
+                <span>*</span>
+                <button>  Discount {record.offer}%</button>
+              </div>
+              <div className="flex flex-row items-center gap-10 text-center mt-[50px]">
+                <div className="px-6 py-[10px] font-semibold">
+                  Total: ₹{totalPrice.toFixed(2)}
+                  <p className="text-sm text-gray-600">
+                    {totalDays} day(s) selected
+                  </p>
+                </div>
 
-           </div>)
-        :<h1 style={{position:'absolute', top:'50%', left:'50%'}}>    <Circles
-        height="80"
-        width="80"
-        color="#4fa94d"
-        ariaLabel="circles-loading"
-        wrapperStyle={{}}
-        wrapperClass=""
-        visible={true}
+
+
+                <button
+                  className="py-[10px] px-[50px] bg-green-600 border border-orange-500 text-white"
+                  onClick={bookingHandler}
+                >
+                  Book Now
+                </button>
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>)
+        : <h1 style={{ position: 'absolute', top: '50%', left: '50%' }}>    <Circles
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="circles-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
         /></h1>}
-</div>
+    </div>
   )
-  
-  
+
+
 }
 
 export default DynamicProduct

@@ -18,21 +18,23 @@ const CalenderComponent = ({onDatesSelect}) => {
 
     const [selectedDates, setSelectedDates] = useState(null)
 
-    const handleSelectDates = async()=>{
-        const startDate = date[0].startDate.toLocaleDateString();
-        const endDate = date[0].endDate.toLocaleDateString();
-        
-        setSelectedDates(`Selected Dates: ${startDate} - ${endDate}`)
-        setShowCalender(false)
+  const handleSelectDates = () => {
+  const startDate = date[0].startDate;
+  const endDate = date[0].endDate;
 
-        const bookingDates = {startDate, endDate}
+  setSelectedDates(
+    `Selected Dates: ${startDate.toDateString()} - ${endDate.toDateString()}`
+  );
+  setShowCalender(false);
 
-        console.log("selectedDates form calender:",bookingDates)
+  const bookingDates = { startDate, endDate };
 
-        if(onDatesSelect){
-            onDatesSelect(bookingDates)
-        }
-    }
+  console.log("selectedDates from calendar:", bookingDates);
+
+  if (onDatesSelect) {
+    onDatesSelect(bookingDates);
+  }
+};
 
     const currentDate = new Date().toDateString();
     const nextDate = new Date();

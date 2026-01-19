@@ -12,7 +12,7 @@ const UserInvoice = ({ userId }) => {
 
   const invoiceHandler = async () => {
     try {
-      const response = await fetch(`https://resort-booking-pied.vercel.app/api/users/${userId}`);
+      const response = await fetch(`http://localhost:3000/api/users/${userId}`);
       const newData = await response.json();
       console.log("newData:", newData);
 
@@ -59,7 +59,7 @@ const UserInvoice = ({ userId }) => {
     }
   
     try {
-      const response = await fetch(`https://resort-booking-pied.vercel.app/api/users/${bookingId}`, {
+      const response = await fetch(`http://localhost:3000/api/users/${bookingId}`, {
         method: 'DELETE',
       });
   
@@ -82,7 +82,7 @@ const UserInvoice = ({ userId }) => {
 
   return (
     <div className="invoice-container">
-    <h1>Username: {invoice.username}</h1>
+    <h1>Welcome,<span className='font-bold'>{invoice.username}</span>👋</h1>
   
     {invoice.bookings.length > 0 ? (
       invoice.bookings.map((item) => {
@@ -96,7 +96,7 @@ const UserInvoice = ({ userId }) => {
             <p>Discount: {item.offer}%</p>
             <p>Number of Days: {days}</p>
             <h4>Price per day: {item.price}</h4>
-            <h4>Total Amount: {totalAmount}</h4>
+            <h4>  Total Amount: ₹{totalAmount - (totalAmount * item.offer) / 100}</h4>
            <div align="center">
            <button onClick={() => deleteBooking(item._id)}
                 className="deleteBtn"

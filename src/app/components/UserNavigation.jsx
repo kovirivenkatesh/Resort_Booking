@@ -1,5 +1,6 @@
 
 
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -8,7 +9,7 @@ const UserNavigation = ({userName}) => {
     <div className='navSection'>
     <div className="title">
       <Link href="/" className="link">
-        <h2>Holiday Resort</h2>
+        <Image src='/uploads/logo.png' alt="Holiday-Resort" height={95} width={120}/>
       </Link>
     </div>
    

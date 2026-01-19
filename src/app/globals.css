@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *{
     margin:0;
     padding:0;
@@ -72,7 +76,7 @@
   
   
   .navSection{
-    background-color: rgb(46,43,43);
+    background-color:green;
     color:white;
     display: flex;
     justify-content: space-between;
@@ -164,7 +168,7 @@
   }
   
   .singleImage{
-    width: 600px;
+    width:2000px;
     height:450px
   }
   .singleSection{
@@ -174,12 +178,12 @@
   }
   
   .singleCenter{
-    margin: 20px;
+    margin:-20px 20px 0px 20px;
     padding: 50px 0 20px 10px;
   }
   .singleDesc{
     text-align: justify;
-    font-size: small;
+    font-size: medium;
   
   }
   .singlePrice{
