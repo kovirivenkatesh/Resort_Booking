@@ -1,7 +1,7 @@
 import DBConnection from "@/app/utils/config/db";
 import { NextResponse } from "next/server";
 import ProductModel from "@/app/utils/models/Product";
-import cloudinary from "@/app/utils/cloudinary";
+import cloudinary from "@/app/utils/config/cloudinary";
 
 export async function POST(request) {
   await DBConnection();
