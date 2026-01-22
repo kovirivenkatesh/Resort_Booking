@@ -2,6 +2,7 @@
 
 "use client"
 
+import toast from 'react-hot-toast'
 import React, { useState } from 'react'
 import { loginAction } from '../serverActions/loginAction';
 import { useRouter } from 'next/navigation';
@@ -29,6 +30,7 @@ const UserLogin = () => {
         try {
           const response = await loginAction(loginDetails)
           if(response.success){
+            toast.success("Logged in successfully")
                 router.push("/")
           }else{
             setError(response.message || "login failed, Invalid Credentials");

@@ -56,26 +56,26 @@ const AddProduct = () => {
      <div className={admin.fields}>
     <div className="">
     <h3>Title</h3>
-    <input type="text" value={title} onChange={(e)=>setTitle(e.target.value)}/>
+    <input type="text" value={title} className=' border-2 border-black' onChange={(e)=>setTitle(e.target.value)}/>
     </div>
      <div>
      <h3>Price</h3>
-     <input type="number" value={price} onChange={(e)=>setPrice(e.target.value)}/>
+     <input type="number" value={price} className=' border-2 border-black' onChange={(e)=>setPrice(e.target.value)}/>
      </div>
      </div>
      <div  className={admin.fields}>
     <div className="">
     <h3>Offer</h3>
-    <input type="number" value={offer} onChange={(e)=>setOffer(e.target.value)}/>
+    <input type="number" value={offer} className=' border-2 border-black' onChange={(e)=>setOffer(e.target.value)}/>
     </div>
       <div className="">
       <h3>Amenities</h3>
-      <input type="text" value={amen} onChange={(e)=>setAmen(e.target.value)}/>
+      <input type="text" value={amen} className=' border-2 border-black' onChange={(e)=>setAmen(e.target.value)}/>
       </div>
      </div>
     <div className={admin.textField}>
     <h3>Description</h3>
-    <textarea type="text" rows="5" value={desc} onChange={(e)=>setDesc(e.target.value)}/>
+    <textarea type="text" rows="5" value={desc} className=' border-2 border-black'  onChange={(e)=>setDesc(e.target.value)}/>
     </div>
      <div className={admin.textField}>
      <h3>Upload Image</h3>

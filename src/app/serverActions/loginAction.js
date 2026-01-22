@@ -26,7 +26,7 @@ export async function loginAction(loginDetails){
             return { success: false, status: 400, message: "Please Register" };
         }
         console.log(error);
-        return { success: false, status: 500, message: "An error occurred" };
+        return { success: false, status: 500, message: "Email or Password is incorrect" };
     }
 
 }

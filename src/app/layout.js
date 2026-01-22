@@ -1,8 +1,11 @@
-import { Inter } from "next/font/google";
+import { IBM_Plex_Serif} from "next/font/google";
 import "./globals.css";
-// import "../../public/styles/styles.css"
+import { Toaster } from 'react-hot-toast'
 
-const inter = Inter({ subsets: ["latin"] });
+const ibmPlexSerif = IBM_Plex_Serif({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+})
 
 export const metadata = {
   title: "Resort Island",
@@ -12,7 +15,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={ibmPlexSerif.className}>
+        {children}
+        <Toaster position="top-right" />
+        </body>
     </html>
   );
 }

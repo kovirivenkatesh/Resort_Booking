@@ -1,6 +1,8 @@
 
 'use client'
 
+import toast from 'react-hot-toast'
+
 import React, { useState } from 'react'
 import { registerAction } from '../serverActions/registerAction';
 import Link from 'next/link';
@@ -30,7 +32,7 @@ const RegisterForm = () => {
     try {
       const response = await registerAction(userRegisterDetails);
       if (response.success) {
-        alert("Registration success")
+        toast.success('Registration Success!')
         router.push("/login")
       } else {
         setError(response.message);
@@ -78,30 +80,28 @@ const RegisterForm = () => {
               <input type="email" name='email' className='text-black' onChange={(e) => setEmail(e.target.value)} />
 
               <h3 className="mb-1 font-medium">Password</h3>
-<div className="relative w-full ml-20">
-  <input
-    type={showPassword ? "text" : "password"}
-    name="password"
-    className="text-black border px-3 py-2 pr-12 rounded w-full
+              <div className="relative w-full ml-20">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  className="text-black border px-3 py-2 pr-12 rounded w-full
                focus:outline-none focus:ring-2 focus:ring-blue-500"
-    onChange={(e) => setPassword(e.target.value)}
-  />
+                  onChange={(e) => setPassword(e.target.value)}
+                />
 
- <button
-  type="button"
-  onClick={() => setShowPassword(!showPassword)}
-  className="icon-button absolute right-32 top-1/2 -translate-y-1/2 text-black"
->
-  {showPassword ? (
-    <FaEye size={18} className="text-black" />
-  ) : (
-    <FaEyeSlash size={18} className="text-black" />
-  )}
-</button>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="icon-button absolute right-32 top-1/2 -translate-y-1/2 text-black"
+                >
+                  {showPassword ? (
+                    <FaEye size={18} className="text-black" />
+                  ) : (
+                    <FaEyeSlash size={18} className="text-black" />
+                  )}
+                </button>
 
-</div>
-
-
+              </div>
               <br /><br />
               <button type='submit'>Register</button>
               <Link href="/login" className='authLink'>
