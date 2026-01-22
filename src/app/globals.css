@@ -74,6 +74,15 @@
     border: 1px solid white;
   }
   
+  /* global.css */
+.icon-button {
+  background: transparent !important ;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  
+}
+
   
   .navSection{
     background-color:green;
