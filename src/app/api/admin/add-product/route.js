@@ -1,51 +1,46 @@
 import DBConnection from "@/app/utils/config/db";
 import { NextResponse } from "next/server";
-import {writeFile} from 'fs/promises'
-import path from 'path'
 import ProductModel from "@/app/utils/models/Product";
+import cloudinary from "@/app/utils/cloudinary";
 
+export async function POST(request) {
+  await DBConnection();
 
-export async function GET(){
-    await DBConnection()
+  const data = await request.formData();
 
-    const records = await ProductModel.find({})
+  const image = data.get("image");
+  const buffer = Buffer.from(await image.arrayBuffer());
 
-    return NextResponse.json({data:records})
+  try {
+    // upload to cloudinary
+    const uploadRes = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: "products" },
+        (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        }
+      ).end(buffer);
+    });
+
+    const newProduct = new ProductModel({
+      title: data.get("title"),
+      price: data.get("price"),
+      offer: data.get("offer"),
+      amen: data.get("amen"),
+      desc: data.get("desc"),
+      image: uploadRes.secure_url, // ✅ cloud url
+    });
+
+    await newProduct.save();
+
+    return NextResponse.json(
+      { success: true, message: "Product added successfully" },
+      { status: 201 }
+    );
+
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ success: false }, { status: 500 });
+  }
 }
-
-export async function POST(request){
-    await DBConnection();
-
-    const data = await request.formData();
-    const title = data.get('title');
-    const price = data.get('price');
-    const offer = data.get('offer');
-    const amen = data.get('amen');
-    const desc = data.get('desc');
-    const image = data.get('image')
-
-    const bufferData = await image.arrayBuffer();
-    const buffer = Buffer.from(bufferData);
-    const imagePath = path.join(process.cwd(), 'public', 'uploads', image.name)
-
-    try {
-            await writeFile(imagePath, buffer);
-            const newProduct = new ProductModel({
-                    title: title,
-                    price: price,
-                    offer: offer,
-                    amen: amen,
-                    desc: desc,
-                    image: `/uploads/${image.name}`
-            })
-            await newProduct.save()
-            return NextResponse.json({response: 'Successfully Uploaded', success:true},
-                {status: 201}
-            )
-
-    } catch (error) {
-        console.log(error)
-        return NextResponse.json({success:false}, {status:500})
-    }
-
-} 
