@@ -1,56 +1,51 @@
 import DBConnection from "@/app/utils/config/db";
-import ProductModel from "@/app/utils/models/Product";
-import cloudinary from "@/app/utils/config/cloudinary";
 import { NextResponse } from "next/server";
+import {writeFile} from 'fs/promises'
+import path from 'path'
+import ProductModel from "@/app/utils/models/Product";
 
-export async function POST(request) {
-  await DBConnection();
 
-  try {
+export async function GET(){
+    await DBConnection()
+
+    const records = await ProductModel.find({})
+
+    return NextResponse.json({data:records})
+}
+
+export async function POST(request){
+    await DBConnection();
+
     const data = await request.formData();
+    const title = data.get('title');
+    const price = data.get('price');
+    const offer = data.get('offer');
+    const amen = data.get('amen');
+    const desc = data.get('desc');
+    const image = data.get('image')
 
-    const title = data.get("title");
-    const price = data.get("price");
-    const offer = data.get("offer");
-    const amen = data.get("amen");
-    const desc = data.get("desc");
-    const image = data.get("image");
+    const bufferData = await image.arrayBuffer();
+    const buffer = Buffer.from(bufferData);
+    const imagePath = path.join(process.cwd(), 'public', 'uploads', image.name)
 
-    if (!title || !price || !offer || !amen || !desc || !image) {
-      return NextResponse.json(
-        { success: false, message: "All fields required" },
-        { status: 400 }
-      );
+    try {
+            await writeFile(imagePath, buffer);
+            const newProduct = new ProductModel({
+                    title: title,
+                    price: price,
+                    offer: offer,
+                    amen: amen,
+                    desc: desc,
+                    image: `/uploads/${image.name}`
+            })
+            await newProduct.save()
+            return NextResponse.json({response: 'Successfully Uploaded', success:true},
+                {status: 201}
+            )
+
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json({success:false}, {status:500})
     }
 
-    // Convert image to base64
-    const bytes = await image.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const base64Image = `data:${image.type};base64,${buffer.toString("base64")}`;
-
-    // Upload to Cloudinary
-    const uploadResult = await cloudinary.uploader.upload(base64Image, {
-      folder: "products",
-    });
-
-    const newProduct = new ProductModel({
-      title,
-      price: Number(price),
-      offer: Number(offer),
-      amen,
-      desc,
-      image: uploadResult.secure_url, // ✅ Cloud URL
-    });
-
-    await newProduct.save();
-
-    return NextResponse.json(
-      { success: true, message: "Product added successfully" },
-      { status: 201 }
-    );
-
-  } catch (error) {
-    console.error("UPLOAD ERROR:", error);
-    return NextResponse.json({ success: false }, { status: 500 });
-  }
-}
+} 

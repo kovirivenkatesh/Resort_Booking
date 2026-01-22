@@ -12,6 +12,7 @@ import { bookingAction } from '../serverActions/bookingAction'
 import { Circles } from 'react-loader-spinner'
 
 
+import toast from 'react-hot-toast'
 
 const DynamicProduct = () => {
 
@@ -29,7 +30,7 @@ const DynamicProduct = () => {
 
   const dynamicProductHandler = async () => {
 
-    const response = await fetch(`https://resort-booking-pied.vercel.app/api/admin/product/${id}`)
+    const response = await fetch(`http://localhost:3000/api/admin/product/${id}`)
     const newData = await response.json()
 
     console.log("dynaic data:", newData)
@@ -43,7 +44,7 @@ const DynamicProduct = () => {
 
   const bookingHandler = async () => {
     if (!selecetedDates) {
-      alert("Please select booking dates")
+      toast.error("Please select booking dates")
       return
     }
 
@@ -51,7 +52,7 @@ const DynamicProduct = () => {
     try {
       const response = await bookingAction(bookingDetails)
       if (response.success) {
-        alert("Booking Successfull")
+         toast.success("Booking Successfull")
         router.push('/invoice')
       }
     } catch (error) {

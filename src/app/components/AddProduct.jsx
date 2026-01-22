@@ -4,6 +4,7 @@
 
 import React, { useState } from 'react'
 import admin from './components.module.css'
+import toast from 'react-hot-toast'
 
 const AddProduct = () => {
     const [title, setTitle] = useState("");
@@ -28,13 +29,13 @@ const AddProduct = () => {
           data.append('image', image);
       
           try {
-              const response = await fetch(`https://resort-booking-pied.vercel.app/api/admin/add-product`,{
+              const response = await fetch(`http://localhost:3000/api/admin/add-product`,{
                 method:'POST',
                 body:data
               })   
               const result = await response.json()
               if(result.success){
-                alert("Record Added Successfully")
+                  toast.success("Record Added Successfully")
                 setTitle("")
                 setPrice("")
                 setOffer("")
